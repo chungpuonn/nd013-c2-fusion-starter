@@ -199,7 +199,7 @@ b) Compute intensity layer of the BEV map
 
 The goal of the fourth task is to fill the "intensity" channel of the BEV map with data from the point-cloud. In order to do so, all points with the same (x,y)-coordinates within the BEV map are identified and then the intensity value of the top-most lidar point is assigned to the respective BEV pixel. Moreover, the resulting intensity image is normalized using percentiles, in order to make sure that the influence of outlier values (very bright and very dark regions) is sufficiently mitigated and objects of interest (e.g. vehicles) are clearly separated from the background. 
 
-As shown in Figure 16(a), the red arrow depicts the x-axis, green arrow depicts the y-axis, and the blue arrow depicts the z-axis. However, OpenCV has a distinct axe’s convention as shown in Figure 16(b). Due to the differences between the axe's convention of Open3D and OpenCV, it causes the wrong result of intensity map. xxx 
+As shown in Figure 16(a), the red arrow depicts the x-axis, green arrow depicts the y-axis, and the blue arrow depicts the z-axis. However, OpenCV has a distinct axe’s convention as shown in Figure 16(b). Due to the differences between the axe's convention of Open3D and OpenCV, it causes the wrong result of intensity map. Hence, a correction is being made to the intensity map in accounting of this. 
 
 Figure 16: (a) Open3D axe's convention;              |  (b) OpenCV axe’s convention
 :-------------------------:|:-------------------------:
