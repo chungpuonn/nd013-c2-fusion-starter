@@ -233,7 +233,7 @@ def project_detections_into_bev(bev_map, detections, configs, color=[]):
 
         # draw colored line to identify object front
         corners_int = bev_corners.reshape(-1, 2)
-        cv2.line(bev_map, (corners_int[0, 0], corners_int[0, 1]), (corners_int[3, 0], corners_int[3, 1]), (255, 255, 0), 2)
+        cv2.line(bev_map, (int(corners_int[0, 0]), int(corners_int[0, 1])), (int(corners_int[3, 0]), int(corners_int[3, 1])), (255, 255, 0), 2)
 
 
 
@@ -434,3 +434,39 @@ def project_labels_into_camera(camera_calibration, image, labels, labels_valid, 
     else:
         return image
 
+
+def compute_box_diag_corners(four_corners):
+    # compute the top-left and bottom-right corners of the box from the complete set of four corners in x and y axes
+    # four_corners: ((x1,y1), (x2,y2), (x3,y3), (x4,y4))
+    # return: [x1, y1, x2, y2]
+    
+    # get x and y coordinates of all four corners
+    x = [four_corners[i][0] for i in range(4)]
+    y = [four_corners[i][1] for i in range(4)]
+    
+    # compute top-left and bottom-right corners
+    x1 = min(x)
+    y1 = min(y)
+    x2 = max(x)
+    y2 = max(y)
+    
+    return [x1, y1, x2, y2]
+
+def compute_iou(boxA, boxB):
+	# determine the (x, y)-coordinates of the intersection rectangle
+	xA = max(boxA[0], boxB[0])
+	yA = max(boxA[1], boxB[1])
+	xB = min(boxA[2], boxB[2])
+	yB = min(boxA[3], boxB[3])
+	# compute the area of intersection rectangle
+	interArea = max(0, xB - xA + 1) * max(0, yB - yA + 1)
+	# compute the area of both the prediction and ground-truth
+	# rectangles
+	boxAArea = (boxA[2] - boxA[0] + 1) * (boxA[3] - boxA[1] + 1)
+	boxBArea = (boxB[2] - boxB[0] + 1) * (boxB[3] - boxB[1] + 1)
+	# compute the intersection over union by taking the intersection
+	# area and dividing it by the sum of prediction + ground-truth
+	# areas - the interesection area
+	iou = interArea / float(boxAArea + boxBArea - interArea)
+	# return the intersection over union value
+	return iou

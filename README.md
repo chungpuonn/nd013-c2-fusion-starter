@@ -131,3 +131,143 @@ Parts of this project are based on the following repositories:
 
 ## License
 [License](LICENSE.md)
+<br><br/>
+
+## Result
+### Section 1: Compute Lidar Point-Cloud from Range Image 
+
+a) Visualize range image channels 
+
+In the Waymo Open dataset, lidar data is stored as a range image. Therefore, the first task is about extracting two of the data channels within the range image, which are "range" and "intensity", and converting the floating-point data to an 8-bit integer value range. After that, the OpenCV library is used to stack the range and intensity image vertically and the visualization is as shown as the Figure 1 follow. 
+<img src="report/step_1/range_image_screenshot_05.12.2023_labelled.png"/>
+Figure 1: Range and Intensity Image (Frame 1)
+<br><br/>
+
+
+b) Visualize lidar point-cloud 
+
+The second task involves writing code within the function “show_pcl” located in the file “student/objdet_pcl.py”. The goal of this task is to use the Open3D library to display the lidar point-cloud in a 3d viewer in order to develop a feel for the nature of lidar point-clouds. A detailed description of all required steps can be found in the code. The viewer is used to locating and closely inspecting point-clouds on vehicles as demonstrated in Figure 2. 
+<img src="report/step_1/example_0_labelled.png"/>
+Figure 2: Visualization of lidar point-cloud in sensor coordinate space on Open3D (Frame 1)
+<br><br/>
+<img src="report/step_1/example_1.png"/>
+Figure 2: Example 1 - Car
+<img src="report/step_1/example_2.png"/>
+Figure 3: Example 2 - Car
+<img src="report/step_1/example_3.png"/>
+Figure 4: Example 3 - Truck
+<img src="report/step_1/example_4.png"/>
+Figure 5: Example 4 - Car
+<img src="report/step_1/example_5.png"/>
+Figure 6: Example 5 - Car
+<img src="report/step_1/example_6.png"/>
+Figure 7: Example 6 - Car
+<img src="report/step_1/example_7.png"/>
+Figure 8: Example 7 - Car
+<img src="report/step_1/example_8.png"/>
+Figure 9: Example 8 - Truck
+<img src="report/step_1/example_9.png"/>
+Figure 10: Example 9 - Van
+<img src="report/step_1/example_10.png"/>
+Figure 11: Example 10 - Bus
+<img src="report/step_1/example_11.png"/>
+Figure 12: Example 11 - Truck towing a trailer
+<br><br/>
+
+Stable vehicle features (e.g. rear-bumper, taillights) are identified on most vehicles. The rear window of vehicles 2 and 3 can be recognized by the unoccupied region in the lidar point-cloud and the darker region in the intensity image. The wheels of vehicles can also be easily spotted in the lidar point-cloud, though it could be harder to spot in the range-intensity image. 
+<br><br/>
+
+### Section 2: Create Birds-Eye View from Lidar PCL 
+a) Convert sensor coordinates to BEV-map coordinates 
+
+The third task involves writing code within the function “bev_from_pcl” located in the file “student/objdet_pcl.py”. The goal of this task is to perform the first step in creating a birds-eye view (BEV) perspective of the lidar point-cloud. Figure 13 depicts the clipped lidar point-cloud in the sensor coordinate space based on the pre-defined configuration,  where 0≤x≤50, −25≤y≤25, −1≤z≤3 
+ 
+
+
+Based on the (x,y)-coordinates in sensor space, the respective coordinates within the BEV coordinate space are computed so that in subsequent tasks, the actual BEV map can be filled with lidar data from the point-cloud. The “bev_height” and “bev_width” are set as 608 as contract to the original height and width of 50 in sensor-space. As illustrated in Figure 4, It can be clearly seen that after the conversion from sensor space to BEV space, the overall shape of point-cloud seems to be compressed in the z-axis direction, though the actual z-values remain the same as before.  
+
+Figure 13: Visualization of clipped lidar point-cloud in sensor coordinate space (Frame 1)             |  Figure 14: Visualization of clipped lidar point-cloud in BEV coordinate space (Frame 1) 
+:-------------------------:|:-------------------------:
+![](report/step_2/clipped_lidar_pcl_based_on_config.png)  |  ![](report/step_2/clipped_lidar_pcl_bev_space.png)
+
+
+<img src="report/step_2/clipped_lidar_pcl_bev_space_top_view.png"/>
+Figure 15: Visualization of clipped lidar point-cloud in BEV coordinate space - top view (Frame 1)
+
+<br><br/>
+b) Compute intensity layer of the BEV map 
+
+The goal of the fourth task is to fill the "intensity" channel of the BEV map with data from the point-cloud. In order to do so, all points with the same (x,y)-coordinates within the BEV map are identified and then the intensity value of the top-most lidar point is assigned to the respective BEV pixel. Moreover, the resulting intensity image is normalized using percentiles, in order to make sure that the influence of outlier values (very bright and very dark regions) is sufficiently mitigated and objects of interest (e.g. vehicles) are clearly separated from the background. 
+
+As shown in Figure 16(a), the red arrow depicts the x-axis, green arrow depicts the y-axis, and the blue arrow depicts the z-axis. However, OpenCV has a distinct axe’s convention as shown in Figure 16(b). Due to the differences between the axe's convention of Open3D and OpenCV, it causes the wrong result of intensity map. xxx 
+
+Figure 16: (a) Open3D axe's convention;              |  (b) OpenCV axe’s convention
+:-------------------------:|:-------------------------:
+![](report/step_2/open3d_axes_convention.png)  |  ![](report/step_2/opencv_axes_convention_resized.png)
+
+
+Figure 17: (a) Intensity map before correction;              |  (b) Intensity map after correction
+:-------------------------:|:-------------------------:
+![](report/step_2/intensity_map_before_correction.png)  |  ![](report/step_2/intensity_map_after_correction.png)
+
+<br><br/> 
+As illustrated in Figure 8, it has been observed that the zoom-in region of vehicle 1 resemble the shape of trunk, with the middle unobstructed pixels could be the rear window glass where the lidar light pass through without reflecting back to its receiver.
+
+<br><br/> 
+<img src="report/step_2/zoom_in_pixels_intensity_value_of_vehicle_1.png"/>
+
+Figure 18: Intensity Map with pixels value - zoom-in region of vehicle 1
+
+
+c) Compute height layer of the BEV map
+
+The goal of this task is to fill the "height" channel of the BEV map with data from the point-cloud. In order to do so, the sorted and pruned point-cloud “lidar_pcl_top” is used from the previous task and normalized the height in each BEV map pixel by the difference between max. and min. height which is defined in the configs structure. As depicted in Figure 19(b), It can be observed that the height values are decreased from the higher rows of the map (could be the rear roof) to the lower rows of the map (could be the trunk). Besides that, the barrier along the right side which is higher than most vehicles have a higher height pixel value as compared to the rest of the map region. 
+ 
+Figure 19: (a) Original;              |  (b) Zoom-in pixel height values of the region of vehicle 1;
+:-------------------------:|:-------------------------:
+![](report/step_2/height_map_original.png)  |  ![](report/step_2/height_map_zoom_in_pixels.png)
+
+<br><br/>
+### Section 3: Model-based Object Detection in BEV Image 
+a) Add a second model
+
+The model-based detection of objects in lidar point-clouds using deep-learning is a heavily researched area with new approaches appearing in the literature and on GitHub every few weeks. On the website Papers With Code and on GitHub, several repositories with code for object detection can be found, such as Complex-YOLO: Real-time 3D Object Detection on Point Clouds and Super Fast and Accurate 3D Object Detection based on 3D LiDAR Point Clouds. 
+
+The goal of this task is to illustrate how a new model can be integrated into an existing framework. The task consists of the following steps: 
+
+1. Cloned the repo [Super Fast and Accurate 3D Object Detection based on 3D LiDAR Point Clouds](https://github.com/maudzung/SFA3D) 
+
+2. Familiarized with the code in SFA3D->test.py with the goal of understanding the steps involved for performing inference with a pre-trained model 
+
+3. Extracted the relevant parameters from SFA3D->test.py->parse_test_configs() and add them to the configs structure in load_configs_model. 
+
+4. Instantiated the model for fpn_resnet in create_model. 
+
+5. Decoded the output and performed post-processing in detect_objects, after model inference has been performed. 
+
+6. Visualized the results by setting the flag show_objects_in_bev_labels_in_camera 
+
+In this project, it’s only focussing on the detection of vehicles, even though the Waymo Open dataset contains labels for other road users as well. 
+
+<br><br/>
+Labels and detected objects 
+(a) Sequence 1;             |  (b) Sequence 2; | (c) Sequence 3;
+:-------------------------:|:-------------------------:|:-------------------------:
+![](report/step_3/vehicle_detection_dataset_1.gif)  |  ![](report/step_3/vehicle_detection_dataset_2.gif) | ![](report/step_3/vehicle_detection_dataset_3.gif)
+
+<br><br/>
+### Section 4 : Performance Evaluation for Object Detection
+
+The first goal of this task is to find pairings between ground-truth labels and detections, so that we can determine whether an object has been (a) missed (false negative), (b) successfully detected (true positive) or (c) has been falsely reported (false positive). Based on the labels within the Waymo Open Dataset, this task is to compute the geometrical overlap between the bounding boxes of labels and detected objects and determine the percentage of this overlap in relation to the area of the bounding boxes. A default method in the literature to arrive at this value is called intersection over union, which is what has been implemented in this task. Based on the pairings between ground-truth labels and detected objects, the next goal is to determine the number of false positives and false negatives for the current frame. After all frames have been processed, an overall performance measure will be computed based on the results produced in this task. After processing all the frames of a sequence, the performance of the object detection algorithm shall now be evaluated. To do so in a meaningful way, the two standard measures "precision" and "recall" will be used, which are based on the accumulated number of positives and negatives from all frames. 
+<br><br/> 
+<img src="report/step_4/performance.png"/>
+Figure 20: Performance of the object detection algorithm for the Sequence 1 - actual result
+<br><br/>
+
+To make sure that the code produces plausible results, the flag “configs_det.use_labels_as_objects” should be set to “True” in a second run. The resulting performance measures for this setting should be the following: 
+
+precision = 1.0, recall = 1.0 
+<br><br/> 
+<img src="report/step_4/performance_true.png"/>
+Figure 21: Performance of the object detection algorithm for the Sequence 1 - testing
+<br><br/>
