@@ -139,8 +139,9 @@ Parts of this project are based on the following repositories:
 a) Visualize range image channels 
 
 In the Waymo Open dataset, lidar data is stored as a range image. Therefore, the first task is about extracting two of the data channels within the range image, which are "range" and "intensity", and converting the floating-point data to an 8-bit integer value range. After that, the OpenCV library is used to stack the range and intensity image vertically and the visualization is as shown as the Figure 1 follow. 
-<img src="report/step_1/range_image_screenshot_05.12.2023_labelled.png"/>
-Figure 1: Range and Intensity Image (Frame 1)
+
+<img src="report/step_1/range_image_cropped_90deg_labelled.png"/>
+Figure 1: Range and Intensity Image (Frame 1), cropped +-90deg in azimuth
 <br><br/>
 
 
@@ -260,7 +261,10 @@ Labels and detected objects
 
 The first goal of this task is to find pairings between ground-truth labels and detections, so that we can determine whether an object has been (a) missed (false negative), (b) successfully detected (true positive) or (c) has been falsely reported (false positive). Based on the labels within the Waymo Open Dataset, this task is to compute the geometrical overlap between the bounding boxes of labels and detected objects and determine the percentage of this overlap in relation to the area of the bounding boxes. A default method in the literature to arrive at this value is called intersection over union, which is what has been implemented in this task. Based on the pairings between ground-truth labels and detected objects, the next goal is to determine the number of false positives and false negatives for the current frame. After all frames have been processed, an overall performance measure will be computed based on the results produced in this task. After processing all the frames of a sequence, the performance of the object detection algorithm shall now be evaluated. To do so in a meaningful way, the two standard measures "precision" and "recall" will be used, which are based on the accumulated number of positives and negatives from all frames. 
 <br><br/> 
-<img src="report/step_4/performance.png"/>
+precision = 0.9540, recall = 0.9509 
+
+<img src="report/step_4/performance_1.png"/>
+
 Figure 20: Performance of the object detection algorithm for the Sequence 1 - actual result
 <br><br/>
 
@@ -268,6 +272,6 @@ To make sure that the code produces plausible results, the flag “configs_det.u
 
 precision = 1.0, recall = 1.0 
 <br><br/> 
-<img src="report/step_4/performance_true.png"/>
+<img src="report/step_4/performance_true_1.png"/>
 Figure 21: Performance of the object detection algorithm for the Sequence 1 - testing
 <br><br/>

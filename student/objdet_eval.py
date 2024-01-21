@@ -64,7 +64,17 @@ def measure_detection_performance(detections, labels, labels_valid, min_iou=0.5)
                 dist_z = label.box.center_z - detection[3]
                 
                 ## step 5 : compute the intersection over union (IOU) between label and detection bounding-box
-                iou = tools.compute_iou(label_corners_diag, detection_corners_diag)
+                # Convert label_box and detection_box to Shapely Polygon objects
+                label_polygon = Polygon(label_corners_full)
+                detection_polygon = Polygon(detection_corners_full)
+
+                # Calculate intersection area
+                intersection_area = label_polygon.intersection(detection_polygon).area
+                # Calculate union area
+                union_area = label_polygon.union(detection_polygon).area
+                # Calculate IoU
+                iou = intersection_area / union_area
+                # iou = tools.compute_iou(label_corners_diag, detection_corners_diag)
                 
                 ## step 6 : if IOU exceeds min_iou threshold, store [iou,dist_x, dist_y, dist_z] in matches_lab_det and increase the TP count
                 if iou > min_iou:
@@ -88,7 +98,7 @@ def measure_detection_performance(detections, labels, labels_valid, min_iou=0.5)
     # compute positives and negatives for precision/recall
     
     ## step 1 : compute the total number of positives present in the scene
-    all_positives = len(labels_valid)
+    all_positives = labels_valid.sum()
 
     ## step 2 : compute the number of false negatives
     false_negatives = all_positives - true_positives 
