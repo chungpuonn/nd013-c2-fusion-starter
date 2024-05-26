@@ -35,20 +35,29 @@ class Track:
         # - initialize track state and track score with appropriate values
         ############
 
-        self.x = np.matrix([[49.53980697],
-                        [ 3.41006279],
-                        [ 0.91790581],
-                        [ 0.        ],
-                        [ 0.        ],
-                        [ 0.        ]])
-        self.P = np.matrix([[9.0e-02, 0.0e+00, 0.0e+00, 0.0e+00, 0.0e+00, 0.0e+00],
-                        [0.0e+00, 9.0e-02, 0.0e+00, 0.0e+00, 0.0e+00, 0.0e+00],
-                        [0.0e+00, 0.0e+00, 6.4e-03, 0.0e+00, 0.0e+00, 0.0e+00],
-                        [0.0e+00, 0.0e+00, 0.0e+00, 2.5e+03, 0.0e+00, 0.0e+00],
-                        [0.0e+00, 0.0e+00, 0.0e+00, 0.0e+00, 2.5e+03, 0.0e+00],
-                        [0.0e+00, 0.0e+00, 0.0e+00, 0.0e+00, 0.0e+00, 2.5e+01]])
-        self.state = 'confirmed'
-        self.score = 0
+        # transform measurement from sensor to vehicle coordinates
+        pos_sens = np.ones((4,1))
+        pos_sens[0:3] = meas.z[0:3]
+        pos_veh = meas.sensor.sens_to_veh * pos_sens
+        
+        # initialize track state from measurement
+        self.x = np.zeros((6,1))
+        # self.x[0:3] = M_rot * meas.z[0:3]
+        self.x[0:3] = pos_veh[0:3] 
+        
+        # set up position estimation error convariance
+        P_pos = M_rot * meas.R * M_rot.T
+        # set up velocity estimation error convariance
+        P_vel = np.matrix([[params.sigma_p44**2, 0.0, 0.0],
+                            [0.0, params.sigma_p55**2, 0.0],
+                            [0.0, 0.0, params.sigma_p66**2]])
+        # overall convariance initialization
+        self.P = np.zeros((6,6))
+        self.P[0:3, 0:3] = P_pos
+        self.P[3:6, 3:6] = P_vel
+        
+        self.state = 'initialized' # state of track: 'tentative', 'confirmed', 'deleted'
+        self.score = 1./params.window
         
         ############
         # END student code
@@ -59,6 +68,7 @@ class Track:
         self.width = meas.width
         self.length = meas.length
         self.height = meas.height
+        
         self.yaw =  np.arccos(M_rot[0,0]*np.cos(meas.yaw) + M_rot[0,1]*np.sin(meas.yaw)) # transform rotation from sensor to vehicle coordinates
         self.t = meas.t
 
@@ -107,10 +117,22 @@ class Trackmanagement:
             if meas_list: # if not empty
                 if meas_list[0].sensor.in_fov(track.x):
                     # your code goes here
-                    pass 
-
+                    track.state =  'tentative'
+                    if track.score > params.delete_threshold + 1:
+                        track.score = params.delete_threshold + 1
+                    track.score -= 1./params.window
+        
         # delete old tracks   
-
+        for track in self.track_list:
+            if track.score < params.delete_threshold:
+                if track.state == 'confirmed':
+                    self.delete_track(track)
+                    # self.N -= 1
+                elif track.state == 'tentative' or track.state == 'initialized':
+                    if np.any(np.diag(track.P[0:2, 0:2]) > params.max_P):
+                        self.delete_track(track)
+                        # self.N -= 1
+                
         ############
         # END student code
         ############ 
@@ -140,7 +162,11 @@ class Trackmanagement:
         # - set track state to 'tentative' or 'confirmed'
         ############
 
-        pass
+        track.score += 1./params.window
+        if track.score > params.confirmed_threshold:
+            track.state = 'confirmed'
+        else:
+            track.state = 'tentative'
         
         ############
         # END student code

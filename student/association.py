@@ -1,6 +1,6 @@
 # ---------------------------------------------------------------------
 # Project "Track 3D-Objects Over Time"
-# Copyright (C) 2020, Dr. Antje Muntzinger / Dr. Andreas Haja.
+# Copyright (C) 2020, Dr. Antje Muntzinger / Dr. Andreas Haja.``
 #
 # Purpose of this file : Data association class with single nearest neighbor association and gating based on Mahalanobis distance
 #
@@ -38,17 +38,23 @@ class Association:
         # - update list of unassigned measurements and unassigned tracks
         ############
         
-        # the following only works for at most one track and one measurement
-        self.association_matrix = np.matrix([]) # reset matrix
-        self.unassigned_tracks = [] # reset lists
-        self.unassigned_meas = []
-        
-        if len(meas_list) > 0:
-            self.unassigned_meas = [0]
-        if len(track_list) > 0:
-            self.unassigned_tracks = [0]
-        if len(meas_list) > 0 and len(track_list) > 0: 
-            self.association_matrix = np.matrix([[0]])
+        ### Instantiate the new unassigned tracks & measurements lists
+        self.unassigned_tracks = list(range(len(track_list)))
+        self.unassigned_meas = list(range(len(meas_list)))
+        ### Initialise the association matrix based on Mahalanobis distance
+        # a single measurement, single track assumption
+        self.association_matrix = np.array(
+            np.full((len(track_list), len(meas_list)), fill_value=np.inf)
+        )
+        # loop over all tracks and all measurements to set up association matrix
+        for x_i, track in enumerate(track_list):
+            for z_j, meas in enumerate(meas_list):
+                # Compute the Mahalanobis distance
+                dist = self.MHD(track, meas, KF)
+                # Check distance is within validation gate
+                if self.gating(dist, meas.sensor):
+                    # Update the entry in the matrix with the distance value
+                    self.association_matrix[x_i, z_j] = dist
         
         ############
         # END student code
@@ -63,14 +69,27 @@ class Association:
         # - return this track and measurement
         ############
 
-        # the following only works for at most one track and one measurement
-        update_track = 0
-        update_meas = 0
+        A = self.association_matrix
+        if np.min(A) == np.inf:
+            return np.nan, np.nan
+        
+        # get indices of minimum entry
+        ij_min = np.unravel_index(np.argmin(A, axis=None), A.shape)
+        ind_track = ij_min[0]
+        ind_meas = ij_min[1]
+        
+        # delete row and column for the next update
+        A = np.delete(A, ind_track, axis=0)
+        A = np.delete(A, ind_meas, axis=1)
+        self.association_matrix = A
+        
+        # update track and measurement
+        update_track = self.unassigned_tracks[ind_track]
+        update_meas = self.unassigned_meas[ind_meas]
         
         # remove from list
         self.unassigned_tracks.remove(update_track) 
         self.unassigned_meas.remove(update_meas)
-        self.association_matrix = np.matrix([])
             
         ############
         # END student code
@@ -82,7 +101,11 @@ class Association:
         # TODO Step 3: return True if measurement lies inside gate, otherwise False
         ############
         
-        pass    
+        limit = chi2.ppf(params.gating_threshold, sensor.dim_meas)
+        if MHD < limit:
+            return True
+        else:
+            return False
         
         ############
         # END student code
@@ -93,7 +116,12 @@ class Association:
         # TODO Step 3: calculate and return Mahalanobis distance
         ############
         
-        pass
+        H = meas.sensor.get_H(track.x) # measurement matrix
+        gamma = meas.z - meas.sensor.get_hx(track.x) # residual
+        S = KF.S(track, meas, H) # covariance of residual
+        # MHD = gamma.T * np.linalg.inv(S) * gamma
+        MHD = np.matmul(gamma.T @ np.linalg.inv(S), gamma)
+        return MHD
         
         ############
         # END student code
