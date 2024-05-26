@@ -133,6 +133,8 @@ Parts of this project are based on the following repositories:
 [License](LICENSE.md)
 <br><br/>
 
+# Mid-term Project
+
 ## Result
 ### Section 1: Compute Lidar Point-Cloud from Range Image 
 
@@ -140,7 +142,7 @@ a) Visualize range image channels
 
 In the Waymo Open dataset, lidar data is stored as a range image. Therefore, the first task is about extracting two of the data channels within the range image, which are "range" and "intensity", and converting the floating-point data to an 8-bit integer value range. After that, the OpenCV library is used to stack the range and intensity image vertically and the visualization is as shown as the Figure 1 follow. 
 
-<img src="report/step_1/range_image_cropped_90deg_labelled.png"/>
+<img src="report/mid_term_project/step_1/range_image_cropped_90deg_labelled.png"/>
 Figure 1: Range and Intensity Image (Frame 1), cropped +-90deg in azimuth
 <br><br/>
 
@@ -148,30 +150,30 @@ Figure 1: Range and Intensity Image (Frame 1), cropped +-90deg in azimuth
 b) Visualize lidar point-cloud 
 
 The second task involves writing code within the function “show_pcl” located in the file “student/objdet_pcl.py”. The goal of this task is to use the Open3D library to display the lidar point-cloud in a 3d viewer in order to develop a feel for the nature of lidar point-clouds. A detailed description of all required steps can be found in the code. The viewer is used to locating and closely inspecting point-clouds on vehicles as demonstrated in Figure 2. 
-<img src="report/step_1/example_0_labelled.png"/>
+<img src="report/mid_term_project/step_1/example_0_labelled.png"/>
 Figure 2: Visualization of lidar point-cloud in sensor coordinate space on Open3D (Frame 1)
 <br><br/>
-<img src="report/step_1/example_1.png"/>
+<img src="report/mid_term_project/step_1/example_1.png"/>
 Figure 2: Example 1 - Car
-<img src="report/step_1/example_2.png"/>
+<img src="report/mid_term_project/step_1/example_2.png"/>
 Figure 3: Example 2 - Car
-<img src="report/step_1/example_3.png"/>
+<img src="report/mid_term_project/step_1/example_3.png"/>
 Figure 4: Example 3 - Truck
-<img src="report/step_1/example_4.png"/>
+<img src="report/mid_term_project/step_1/example_4.png"/>
 Figure 5: Example 4 - Car
-<img src="report/step_1/example_5.png"/>
+<img src="report/mid_term_project/step_1/example_5.png"/>
 Figure 6: Example 5 - Car
-<img src="report/step_1/example_6.png"/>
+<img src="report/mid_term_project/step_1/example_6.png"/>
 Figure 7: Example 6 - Car
-<img src="report/step_1/example_7.png"/>
+<img src="report/mid_term_project/step_1/example_7.png"/>
 Figure 8: Example 7 - Car
-<img src="report/step_1/example_8.png"/>
+<img src="report/mid_term_project/step_1/example_8.png"/>
 Figure 9: Example 8 - Truck
-<img src="report/step_1/example_9.png"/>
+<img src="report/mid_term_project/step_1/example_9.png"/>
 Figure 10: Example 9 - Van
-<img src="report/step_1/example_10.png"/>
+<img src="report/mid_term_project/step_1/example_10.png"/>
 Figure 11: Example 10 - Bus
-<img src="report/step_1/example_11.png"/>
+<img src="report/mid_term_project/step_1/example_11.png"/>
 Figure 12: Example 11 - Truck towing a trailer
 <br><br/>
 
@@ -189,10 +191,10 @@ Based on the (x,y)-coordinates in sensor space, the respective coordinates withi
 
 Figure 13: Visualization of clipped lidar point-cloud in sensor coordinate space (Frame 1)             |  Figure 14: Visualization of clipped lidar point-cloud in BEV coordinate space (Frame 1) 
 :-------------------------:|:-------------------------:
-![](report/step_2/clipped_lidar_pcl_based_on_config.png)  |  ![](report/step_2/clipped_lidar_pcl_bev_space.png)
+![](report/mid_term_project/step_2/clipped_lidar_pcl_based_on_config.png)  |  ![](report/mid_term_project/step_2/clipped_lidar_pcl_bev_space.png)
 
 
-<img src="report/step_2/clipped_lidar_pcl_bev_space_top_view.png"/>
+<img src="report/mid_term_project/step_2/clipped_lidar_pcl_bev_space_top_view.png"/>
 Figure 15: Visualization of clipped lidar point-cloud in BEV coordinate space - top view (Frame 1)
 
 <br><br/>
@@ -204,18 +206,18 @@ As shown in Figure 16(a), the red arrow depicts the x-axis, green arrow depicts 
 
 Figure 16: (a) Open3D axe's convention;              |  (b) OpenCV axe’s convention
 :-------------------------:|:-------------------------:
-![](report/step_2/open3d_axes_convention.png)  |  ![](report/step_2/opencv_axes_convention_resized.png)
+![](report/mid_term_project/step_2/open3d_axes_convention.png)  |  ![](report/mid_term_project/step_2/opencv_axes_convention_resized.png)
 
 
 Figure 17: (a) Intensity map before correction;              |  (b) Intensity map after correction
 :-------------------------:|:-------------------------:
-![](report/step_2/intensity_map_before_correction.png)  |  ![](report/step_2/intensity_map_after_correction.png)
+![](report/mid_term_project/step_2/intensity_map_before_correction.png)  |  ![](report/mid_term_project/step_2/intensity_map_after_correction.png)
 
 <br><br/> 
 As illustrated in Figure 8, it has been observed that the zoom-in region of vehicle 1 resemble the shape of trunk, with the middle unobstructed pixels could be the rear window glass where the lidar light pass through without reflecting back to its receiver.
 
 <br><br/> 
-<img src="report/step_2/zoom_in_pixels_intensity_value_of_vehicle_1.png"/>
+<img src="report/mid_term_project/step_2/zoom_in_pixels_intensity_value_of_vehicle_1.png"/>
 
 Figure 18: Intensity Map with pixels value - zoom-in region of vehicle 1
 
@@ -226,7 +228,7 @@ The goal of this task is to fill the "height" channel of the BEV map with data f
  
 Figure 19: (a) Original;              |  (b) Zoom-in pixel height values of the region of vehicle 1;
 :-------------------------:|:-------------------------:
-![](report/step_2/height_map_original.png)  |  ![](report/step_2/height_map_zoom_in_pixels.png)
+![](report/mid_term_project/step_2/height_map_original.png)  |  ![](report/mid_term_project/step_2/height_map_zoom_in_pixels.png)
 
 <br><br/>
 ### Section 3: Model-based Object Detection in BEV Image 
@@ -254,7 +256,7 @@ In this project, it’s only focussing on the detection of vehicles, even though
 Labels and detected objects 
 (a) Sequence 1;             |  (b) Sequence 2; | (c) Sequence 3;
 :-------------------------:|:-------------------------:|:-------------------------:
-![](report/step_3/vehicle_detection_dataset_1.gif)  |  ![](report/step_3/vehicle_detection_dataset_2.gif) | ![](report/step_3/vehicle_detection_dataset_3.gif)
+![](report/mid_term_project/step_3/vehicle_detection_dataset_1.gif)  |  ![](report/mid_term_project/step_3/vehicle_detection_dataset_2.gif) | ![](report/mid_term_project/step_3/vehicle_detection_dataset_3.gif)
 
 <br><br/>
 ### Section 4 : Performance Evaluation for Object Detection
@@ -263,7 +265,7 @@ The first goal of this task is to find pairings between ground-truth labels and 
 <br><br/> 
 precision = 0.9540, recall = 0.9509 
 
-<img src="report/step_4/performance_1.png"/>
+<img src="report/mid_term_project/step_4/performance_1.png"/>
 
 Figure 20: Performance of the object detection algorithm for the Sequence 1 - actual result
 <br><br/>
@@ -272,6 +274,90 @@ To make sure that the code produces plausible results, the flag “configs_det.u
 
 precision = 1.0, recall = 1.0 
 <br><br/> 
-<img src="report/step_4/performance_true_1.png"/>
+<img src="report/mid_term_project/step_4/performance_true_1.png"/>
 Figure 21: Performance of the object detection algorithm for the Sequence 1 - testing
 <br><br/>
+
+
+<br><br/>
+# Final Project: Track 3D-Objects Over Time
+
+## Result
+### Q1
+The final project consists of four main steps, where i have:
+
+1. Implemented an extended Kalman filter.
+2. Implemented track management including track state and track score, track initialization and deletion.
+3. Implemented single nearest neighbour data association and gating.
+4. Applied sensor fusion by implementing the nonlinear camera measurement model and a sensor visibility check.
+
+
+After completing the final project, you will have implemented your own sensor fusion system that is able to track vehicles over time with real-world camera and lidar measurements!
+
+
+#### __Step 3: Multi-Target Tracking with LiDAR only__
+Tracking result with tracks from Sequence 1:
+
+![](report/final_project/step_3/association_rmse.gif) 
+<br><br/>
+<img src="report/final_project/step_3/rmse.png"/>
+Figure 1: RMSE for the valid tracks in Sequence 1 with LiDAR only
+<br><br/>
+
+
+#### __Step 4: Multi-Target Tracking with the fusion of LiDAR and Camera__ 
+Tracking result with tracks from Sequence 1:
+
+![](report/final_project/step_4/multi_target_tracking_lidar_camera.gif) 
+<br><br/>
+<img src="report/final_project/step_4/rmse.png"/>
+Figure 2: RMSE for the valid tracks in Sequence 1 with the fusion of LiDAR and Camera
+<br><br/>
+
+
+One of the most difficult part of project is to implemen the track management. The track management is responsible for the initialization and deletion of tracks, as well as the assignment of measurements to tracks. The track management is a crucial part of the tracking pipeline, as it ensures that the tracker is able to maintain a consistent and accurate estimate of the state of each target over time. The track management is responsible for the following tasks:
+
+- Track Initialization: The track management is responsible for initializing new tracks when new measurements are received that do not match any existing tracks. This is done by creating a new track object and assigning the measurement to the track.
+- Track Deletion: The track management is responsible for deleting tracks that have not received any measurements for a certain number of time steps. This is done to ensure that the tracker does not maintain tracks for targets that are no longer present in the scene.
+- Measurement Assignment: The track management is responsible for assigning measurements to tracks based on their likelihood of originating from the target associated with the track. This is done using a data association algorithm, which assigns each measurement to the track that is most likely to have generated it.
+
+The track management is a complex and challenging part of the tracking pipeline, as it requires careful design and implementation to ensure that the tracker is able to maintain accurate and consistent estimates of the state of each target over time. In particular, the measurement assignment step is challenging, as it requires the tracker to make decisions based on uncertain and noisy measurements, which can lead to errors in the tracking results if not handled properly. However, by carefully designing and implementing the track management, it is possible to achieve accurate and reliable tracking results in a wide range of scenarios.
+
+
+
+### Q2. The benefits in camera-lidar fusion compared to lidar-only tracking (in theory and in your concrete results)
+
+**Reduced False Positives:** 
+
+By cross-validating detections from both LiDAR and cameras, fusion systems can potentially reduce false positives that may occur when relying on a single sensor modality. This can lead to more reliable tracking and perception in complex environments with challenging scenarios like occlusions or dynamic lighting conditions. The evidence from the results shows that the performance of camera-lidar fusion has less occurance of having confirmed ghost tracks or track losses as compared to lidar-only tracking.
+
+
+**Increased Redundancy and Reliability:** 
+
+Using multiple sensing modalities increases redundancy in the perception system, improving reliability and fault tolerance. If one sensor fails or provides unreliable data, the system can rely on the other sensor(s) to maintain functionality and safety.
+
+### Q3. Challenges that a sensor fusion system will face in real-life scenarios and in the project. 
+
+1. Sensor Calibration:
+
+    Challenge: Accurate calibration between sensors is critical to ensure that data from different sensors align correctly in space and time. Misalignment can lead to incorrect fusion results.
+
+    Observation: In practice, maintaining precise calibration over time and under different environmental conditions can be difficult. Mechanical vibrations, temperature changes, and physical impacts can all cause calibration drift.
+
+2. Synchronization:
+
+    Challenge: Ensuring that data from different sensors is synchronized in time is crucial for accurate fusion. Asynchronous data can lead to temporal misalignment, where the information from one sensor is outdated relative to the other.
+
+    Observation: In real-world projects, achieving and maintaining tight synchronization can be complex, especially with sensors operating at different frame rates and latencies.
+
+3. Environmental Conditions:
+
+    Challenge: Both LiDAR and cameras have their own limitations under certain environmental conditions. For instance, LiDAR can struggle with heavy rain or fog, while cameras can be affected by low light or glare.
+
+    Observation: In projects, it’s common to encounter scenarios where one sensor underperforms, and the system needs to rely more heavily on the other sensor. This reliance can test the robustness of the fusion algorithms.
+
+
+### Q4. Ways to improve the tracking results in the future
+- Implement a more advanced data association, e.g. Global Nearest Neighbor (GNN) or Joint Probabilistic Data Association (JPDA).
+- Use a non-linear motion model, e.g. a bicycle model, which is more appropriate for vehicle movement than our linear motion model, since a vehicle can only move forward or backward, not in any direction.
+- Deep Learning Integration: Utilize deep learning models that can effectively learn to fuse data from multiple sensors, improving robustness to noise and varying conditions.
