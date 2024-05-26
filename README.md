@@ -283,7 +283,7 @@ Figure 21: Performance of the object detection algorithm for the Sequence 1 - te
 # Final Project: Track 3D-Objects Over Time
 
 ## Result
-### Q1
+### Q1. A short recap of the four tracking steps implemented (filter, track management, association, camera fusion) and the achieved results.
 The final project consists of four main steps, where i have:
 
 1. Implemented an extended Kalman filter.
@@ -301,7 +301,7 @@ Tracking result with tracks from Sequence 1:
 ![](report/final_project/step_3/association_rmse.gif) 
 <br><br/>
 <img src="report/final_project/step_3/rmse.png"/>
-Figure 1: RMSE for the valid tracks in Sequence 1 with LiDAR only
+Figure 22: RMSE for the valid tracks in Sequence 1 with LiDAR only
 <br><br/>
 
 
@@ -311,7 +311,7 @@ Tracking result with tracks from Sequence 1:
 ![](report/final_project/step_4/multi_target_tracking_lidar_camera.gif) 
 <br><br/>
 <img src="report/final_project/step_4/rmse.png"/>
-Figure 2: RMSE for the valid tracks in Sequence 1 with the fusion of LiDAR and Camera
+Figure 23: RMSE for the valid tracks in Sequence 1 with the fusion of LiDAR and Camera
 <br><br/>
 
 
@@ -325,7 +325,7 @@ The track management is a complex and challenging part of the tracking pipeline,
 
 
 
-### Q2. The benefits in camera-lidar fusion compared to lidar-only tracking (in theory and in your concrete results)
+### Q2. The benefits in camera-lidar fusion compared to lidar-only tracking (in theory and in concrete results)
 
 **Reduced False Positives:** 
 
