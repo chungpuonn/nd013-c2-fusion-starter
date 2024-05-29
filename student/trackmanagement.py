@@ -48,9 +48,9 @@ class Track:
         # set up position estimation error convariance
         P_pos = M_rot * meas.R * M_rot.T
         # set up velocity estimation error convariance
-        P_vel = np.matrix([[params.sigma_p44**2, 0.0, 0.0],
-                            [0.0, params.sigma_p55**2, 0.0],
-                            [0.0, 0.0, params.sigma_p66**2]])
+        P_vel = np.matrix([[params.sigma_lidar_x**2, 0.0, 0.0],
+                            [0.0, params.sigma_lidar_y**2, 0.0],
+                            [0.0, 0.0, params.sigma_lidar_z**2]])
         # overall convariance initialization
         self.P = np.zeros((6,6))
         self.P[0:3, 0:3] = P_pos
@@ -130,8 +130,8 @@ class Trackmanagement:
                     # self.N -= 1
                 elif track.state == 'tentative' or track.state == 'initialized':
                     if np.any(np.diag(track.P[0:2, 0:2]) > params.max_P):
-                        self.delete_track(track)
-                        # self.N -= 1
+                            self.delete_track(track)
+                            # self.N -= 1
                 
         ############
         # END student code
