@@ -298,9 +298,9 @@ After completing the final project, you will have implemented your own sensor fu
 #### __Step 3: Multi-Target Tracking with LiDAR only__
 Tracking result with tracks from Sequence 1:
 
-![](report/final_project/step_3/association_rmse.gif) 
+![](report/final_project/step_3/association_rmse_improved.gif) 
 <br><br/>
-<img src="report/final_project/step_3/rmse.png"/>
+<img src="report/final_project/step_3/rmse_improved.png"/>
 Figure 22: RMSE for the valid tracks in Sequence 1 with LiDAR only
 <br><br/>
 
@@ -308,9 +308,9 @@ Figure 22: RMSE for the valid tracks in Sequence 1 with LiDAR only
 #### __Step 4: Multi-Target Tracking with the fusion of LiDAR and Camera__ 
 Tracking result with tracks from Sequence 1:
 
-![](report/final_project/step_4/multi_target_tracking_lidar_camera.gif) 
+![](report/final_project/step_4/multi_target_tracking_lidar_camera_improved.gif) 
 <br><br/>
-<img src="report/final_project/step_4/rmse.png"/>
+<img src="report/final_project/step_4/rmse_improved.png"/>
 Figure 23: RMSE for the valid tracks in Sequence 1 with the fusion of LiDAR and Camera
 <br><br/>
 
