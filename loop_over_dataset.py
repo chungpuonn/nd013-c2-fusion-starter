@@ -68,7 +68,9 @@ model_det = det.create_model(configs_det)
 configs_det.use_labels_as_objects = True # True = use groundtruth labels as objects, False = use model-based detection
 
 ## Uncomment this setting to restrict the y-range in the final project
+configs_det.lim_x = [0, 45] # detection range in m
 configs_det.lim_y = [-25, 25] 
+configs_det.lim_z = [-1, 3] 
 
 ## Initialize tracking
 KF = Filter() # set up Kalman filter 
