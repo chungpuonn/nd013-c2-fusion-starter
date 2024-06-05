@@ -308,9 +308,9 @@ Figure 22: RMSE for the valid tracks in Sequence 1 with LiDAR only
 #### __Step 4: Multi-Target Tracking with the fusion of LiDAR and Camera__ 
 Tracking result with tracks from Sequence 1:
 
-![](report/final_project/step_4/multi_target_tracking_lidar_camera_improved.gif) 
+![](report/final_project/step_4/multi_target_tracking_lidar_camera_improved_shorter_range.gif) 
 <br><br/>
-<img src="report/final_project/step_4/rmse_improved.png"/>
+<img src="report/final_project/step_4/rmse_improved_shorter_ranger.png"/>
 Figure 23: RMSE for the valid tracks in Sequence 1 with the fusion of LiDAR and Camera
 <br><br/>
 
